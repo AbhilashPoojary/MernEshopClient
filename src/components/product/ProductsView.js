@@ -13,6 +13,7 @@ import Pagination from "./Pagination";
 import { selectUserInfo } from "../../redux/slice/authSlice";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Spinner from "../Spinner";
 
 export default function ProductsView({
   gridView,
@@ -24,9 +25,7 @@ export default function ProductsView({
   console.log(user);
   const filteredProducts = useSelector(selectFilteredProducts);
   const productData = useSelector(products);
-  // const fetchedProducts = useSelector((state) => state.product.products);
-  // const fetchedProducts = useSelector(allProductCall);
-  //   const [currentPage, setCurrentPage] = useState(1);
+  const productLoading = useSelector(loading);
   const [productsPerPage] = useState(9);
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
@@ -61,63 +60,67 @@ export default function ProductsView({
   return (
     <>
       <div className={`${gridView ? "flex flex-wrap" : ""} justify-between`}>
-        {currentProducts?.map((item) => {
-          return (
-            <div
-              key={item._id}
-              className={`${
-                gridView ? "w-30" : "w-full flex"
-              } bg-white border border-gray-200 rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700 my-3`}
-            >
+        {productLoading ? (
+          <Spinner />
+        ) : (
+          currentProducts?.map((item) => {
+            return (
               <div
+                key={item._id}
                 className={`${
-                  gridView
-                    ? "border-b-2 pb-2 flex justify-center"
-                    : "border-r-2 pr-2 w-full flex justify-center max-w-xs"
-                }`}
+                  gridView ? "w-30" : "w-full flex"
+                } bg-white border border-gray-200 rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700 my-3`}
               >
-                <a href="#" className="">
-                  <img
-                    className={`w-48 h-48 overflow-hidden`}
-                    src={item.imgUrl}
-                    alt=""
-                  />
-                </a>
-              </div>
-              <div className={`${gridView ? "" : "ml-2"}`}>
-                <h5
+                <div
                   className={`${
-                    gridView ? "text-center" : "mt-2"
-                  } mb-2 text-xl text-orange-600 tracking-tight`}
+                    gridView
+                      ? "border-b-2 pb-2 flex justify-center"
+                      : "border-r-2 pr-2 w-full flex justify-center max-w-xs"
+                  }`}
                 >
-                  $ {item.price}
-                </h5>
-                <a href="#">
+                  <a href="#" className="">
+                    <img
+                      className={`w-48 h-48 overflow-hidden`}
+                      src={item.imgUrl}
+                      alt=""
+                    />
+                  </a>
+                </div>
+                <div className={`${gridView ? "" : "ml-2"}`}>
                   <h5
                     className={`${
-                      gridView ? "text-center" : ""
-                    } mb-2 text-lg font-bold tracking-tight text-gray-900 dark:text-white`}
+                      gridView ? "text-center" : "mt-2"
+                    } mb-2 text-xl text-orange-600 tracking-tight`}
                   >
-                    {trimString(item.name, 20)}
+                    $ {item.price}
                   </h5>
-                </a>
-                {!gridView && (
-                  <p className="mb-3">{trimString(item.desc, 200)}</p>
-                )}
-                <div className={`${gridView ? "text-center" : ""}`}>
-                  <button
-                    className={`${
-                      gridView ? "w-full" : "rounded mb-3"
-                    } bg-orange-600 text-white p-2`}
-                    onClick={() => handleAddCart(item)}
-                  >
-                    Add to cart
-                  </button>
+                  <a href="#">
+                    <h5
+                      className={`${
+                        gridView ? "text-center" : ""
+                      } mb-2 text-lg font-bold tracking-tight text-gray-900 dark:text-white`}
+                    >
+                      {trimString(item.name, 20)}
+                    </h5>
+                  </a>
+                  {!gridView && (
+                    <p className="mb-3">{trimString(item.desc, 200)}</p>
+                  )}
+                  <div className={`${gridView ? "text-center" : ""}`}>
+                    <button
+                      className={`${
+                        gridView ? "w-full" : "rounded mb-3"
+                      } bg-orange-600 text-white p-2`}
+                      onClick={() => handleAddCart(item)}
+                    >
+                      Add to cart
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })
+        )}
       </div>
       <Pagination
         productsPerPage={productsPerPage}

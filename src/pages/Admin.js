@@ -43,12 +43,18 @@ export default function Admin() {
   const [currentPage, setCurrentPage] = useState(1);
   const [search, setSearch] = useState("");
   const [download, setDownload] = useState("");
-  const indexOfLastProduct = currentPage * productsPerPage;
-  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  const currentProducts = productsAdmin?.slice(
+  let indexOfLastProduct = currentPage * productsPerPage;
+  let indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  let currentProducts = productsAdmin?.slice(
     indexOfFirstProduct,
     indexOfLastProduct
   );
+  console.log({
+    productsAdmin,
+    currentProducts,
+    indexOfLastProduct,
+    indexOfFirstProduct,
+  });
   const paginate = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
@@ -90,11 +96,14 @@ export default function Admin() {
   useEffect(() => {
     if (loadProducts) {
       dispatch(allProductCall());
-      dispatch(FILTER_BY_SEARCH({ products: productsAdmin, search }));
+      // dispatch(FILTER_BY_SEARCH({ products: allProducts, search }));
     }
   }, [loadProducts]);
   useEffect(() => {
     dispatch(FILTER_BY_SEARCH({ products: allProducts, search }));
+    if (productsAdmin.length < 5) {
+      currentProducts = productsAdmin;
+    }
   }, [search]);
   useEffect(() => {
     dispatch(FILTER_BY_SEARCH({ products: allProducts, search }));

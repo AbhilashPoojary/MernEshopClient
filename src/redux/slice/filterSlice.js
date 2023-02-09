@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
+  loading: true,
   filteredProducts: [],
 };
 
@@ -16,6 +17,7 @@ const filterSlice = createSlice({
           product?.category?.toLowerCase().includes(search?.toLowerCase())
       );
       state.filteredProducts = tempProducts;
+      state.loading = false;
     },
     FILTER_BY_CATEGORY(state, action) {
       let tempProducts = [];
@@ -29,6 +31,7 @@ const filterSlice = createSlice({
         );
       }
       state.filteredProducts = tempProducts;
+      state.loading = false;
     },
     FILTER_BY_BRAND(state, action) {
       let tempProducts = [];
@@ -39,6 +42,7 @@ const filterSlice = createSlice({
         tempProducts = products.filter((product) => product.brand === brand);
       }
       state.filteredProducts = tempProducts;
+      state.loading = false;
     },
     FILTER_BY_PRICE(state, action) {
       let tempProducts = [];
@@ -46,6 +50,7 @@ const filterSlice = createSlice({
       console.log(products, price);
       tempProducts = products.filter((product) => product.price <= price);
       state.filteredProducts = tempProducts;
+      state.loading = false;
     },
     SORT_PRODUCTS(state, action) {
       let tempProducts = [];
@@ -76,6 +81,7 @@ const filterSlice = createSlice({
         });
       }
       state.filteredProducts = tempProducts;
+      state.loading = false;
     },
   },
 });
@@ -88,6 +94,7 @@ export const {
   SORT_PRODUCTS,
 } = filterSlice.actions;
 
+export const loading = (state) => state.filter.loading;
 export const selectFilteredProducts = (state) => state.filter.filteredProducts;
 
 export default filterSlice.reducer;

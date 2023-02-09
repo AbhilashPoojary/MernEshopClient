@@ -15,6 +15,11 @@ const adminFilterSlice = createSlice({
           product?.name?.toLowerCase().includes(search?.toLowerCase()) ||
           product?.category?.toLowerCase().includes(search?.toLowerCase())
       );
+      console.log({
+        products,
+        search,
+        tempProducts,
+      });
       state.filteredProducts = tempProducts;
     },
   },

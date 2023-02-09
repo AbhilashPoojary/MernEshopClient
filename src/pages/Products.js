@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import ProductFilter from "../components/product/ProductFilter";
 import ProductsView from "../components/product/ProductsView";
 import TopFilter from "../components/product/TopFilter";
-import { useDispatch, useSelector } from "react-redux";
 
 export default function Products() {
   const [gridView, setGridView] = useState(true);
